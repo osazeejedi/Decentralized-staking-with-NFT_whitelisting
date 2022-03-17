@@ -4,7 +4,7 @@ import "@openzeppelin/contracts/token/ERC20/ERC20.sol";
 import "@openzeppelin/contracts/access/Ownable.sol";
 import "@openzeppelin/contracts/token/ERC721/IERC721.sol";
 import "@openzeppelin/contracts/utils/math/SafeMath.sol";
-import {BAT} from "./BAT.sol"
+import {BAT} from "./BAT.sol";
 
 
 contract BoredApe is ERC20, Ownable {
@@ -13,38 +13,27 @@ contract BoredApe is ERC20, Ownable {
   address BoredApe = 0xBC4CA0EDA7647A8Ab7C2061C2E118A18A936F13D;
   
 
-    /**
-     * @notice We usually require to know who are all the stakeholders.
-     */
     address[] internal stakeholders;
 
-    /**
-     * @notice The stakes for each stakeholder.
-     */
+   
     mapping(address => uint256) internal stakes;
 
-    /**
-     * @notice The accumulated rewards for each stakeholder.
-     */
+   
     mapping(address => uint256) internal rewards;
 
-    /**
-     * @notice The constructor for the Staking Token.
-     * @param _owner The address to receive all tokens on construction.
-     * @param _supply The amount of tokens to mint on construction.
-     */
+    
     constructor(address _owner, uint256 _supply) 
         public
     { 
-        _mint(_owner, _supply);
+        _mint(_owner, 1000000000);
     }
 
     // ---------- STAKES ----------
 
-    /**
-     * @notice A method for a stakeholder to create a stake.
-     * @param _stake The size of the stake to be created.
-     */
+    
+    // A method for a stakeholder to create a stake.
+    // _stake The size of the stake to be created.
+    
     function createStake(uint256 _stake)
         public
     {
@@ -53,10 +42,8 @@ contract BoredApe is ERC20, Ownable {
         stakes[msg.sender] = stakes[msg.sender].add(_stake);
     }
 
-    /**
-     * @notice A method for a stakeholder to remove a stake.
-     * @param _stake The size of the stake to be removed.
-     */
+    // method for a stakeholder to remove a stake.
+     //_stake The size of the stake to be removed.
     function removeStake(uint256 _stake)
         public
     {
@@ -66,9 +53,9 @@ contract BoredApe is ERC20, Ownable {
     }
 
     /**
-     * @notice A method to retrieve the stake for a stakeholder.
-     * @param _stakeholder The stakeholder to retrieve the stake for.
-     * @return uint256 The amount of wei staked.
+     A method to retrieve the stake for a stakeholder.
+     _stakeholder The stakeholder to retrieve the stake for.
+     uint256 The amount of wei staked.
      */
     function stakeOf(address _stakeholder)
         public
@@ -79,8 +66,8 @@ contract BoredApe is ERC20, Ownable {
     }
 
     /**
-     * @notice A method to the aggregated stakes from all stakeholders.
-     * @return uint256 The aggregated stakes from all stakeholders.
+      A method to the aggregated stakes from all stakeholders.
+      uint256 The aggregated stakes from all stakeholders.
      */
     function totalStakes()
         public
@@ -97,9 +84,9 @@ contract BoredApe is ERC20, Ownable {
     // ---------- STAKEHOLDERS ----------
 
     /**
-     * @notice A method to check if an address is a stakeholder.
-     * @param _address The address to verify.
-     * @return bool, uint256 Whether the address is a stakeholder, 
+      A method to check if an address is a stakeholder.
+     _address The address to verify.
+      bool, uint256 Whether the address is a stakeholder, 
      * and if so its position in the stakeholders array.
      */
     function isStakeholder(address _address)
@@ -116,8 +103,8 @@ contract BoredApe is ERC20, Ownable {
     }
 
     /**
-     * @notice A method to add a stakeholder.
-     * @param _stakeholder The stakeholder to add.
+      A method to add a stakeholder.
+      _stakeholder The stakeholder to add.
      */
     function addStakeholder(address _stakeholder)
         public
@@ -128,8 +115,8 @@ contract BoredApe is ERC20, Ownable {
     }
 
     /**
-     * @notice A method to remove a stakeholder.
-     * @param _stakeholder The stakeholder to remove.
+      A method to remove a stakeholder.
+      _stakeholder The stakeholder to remove.
      */
     function removeStakeholder(address _stakeholder)
         public
@@ -144,8 +131,8 @@ contract BoredApe is ERC20, Ownable {
     // ---------- REWARDS ----------
     
     /**
-     * @notice A method to allow a stakeholder to check his rewards.
-     * @param _stakeholder The stakeholder to check rewards for.
+     * A method to allow a stakeholder to check his rewards.
+      _stakeholder The stakeholder to check rewards for.
      */
     function rewardOf(address _stakeholder) 
         public
@@ -156,8 +143,8 @@ contract BoredApe is ERC20, Ownable {
     }
 
     /**
-     * @notice A method to the aggregated rewards from all stakeholders.
-     * @return uint256 The aggregated rewards from all stakeholders.
+     *  A method to the aggregated rewards from all stakeholders.
+     * uint256 The aggregated rewards from all stakeholders.
      */
     function totalRewards()
         public
