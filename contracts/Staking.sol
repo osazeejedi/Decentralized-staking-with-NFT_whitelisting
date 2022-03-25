@@ -7,10 +7,25 @@ import "@openzeppelin/contracts/utils/math/SafeMath.sol";
 import {BAT} from "./BAT.sol";
 
 
-contract BoredApe is ERC20, Ownable {
+contract StakingRewards{
+
+    IERC20 public stakingToken;
+    IERC721 public BoredApeNFT;
+
+ struct Account{
+        uint currentStake;
+        uint lastTimeStake;
+        }
+    mapping(address => Account) public AccountDetails;
+
+    
+    uint256 public rewardRate = 0;
+    uint256 public rewardsDuration = 30 days;
+    uint256 minimumPeriod = 3 days;
+  
   using SafeMath for uint256;
 
-  address BoredApe = 0xBC4CA0EDA7647A8Ab7C2061C2E118A18A936F13D;
+//   address BoredApeNFT = 0xBC4CA0EDA7647A8Ab7C2061C2E118A18A936F13D;
   
 
     address[] internal stakeholders;
@@ -22,10 +37,9 @@ contract BoredApe is ERC20, Ownable {
     mapping(address => uint256) internal rewards;
 
     
-    constructor(address _owner, uint256 _supply) 
-        public
-    { 
-        _mint(_owner, 1000000000);
+   constructor(address _stakingToken, address _BoredApeNFT) {
+        stakingToken = IERC20(_stakingToken);
+        BoredApeNFT = IERC721(_BoredApeNFT);
     }
 
     // ---------- STAKES ----------
@@ -44,12 +58,28 @@ contract BoredApe is ERC20, Ownable {
 
     // method for a stakeholder to remove a stake.
      //_stake The size of the stake to be removed.
-    function removeStake(uint256 _stake)
-        public
-    {
-        stakes[msg.sender] = stakes[msg.sender].sub(_stake);
-        if(stakes[msg.sender] == 0) removeStakeholder(msg.sender);
-        _mint(msg.sender, _stake);
+    function stake(uint _amount) external {
+      Account storage A = AccountDetails[msg.sender];
+      require(IERC721(BoredApe).balanceOf(_address)>= 1, "buy one bored ape to stake");
+      require(_amountIn >= 5* 10**18, "You need  to stake > 5 BAT tokens");
+      if (A.lastTimeStake==0){
+        A.currentStake = _amount;
+      }
+      else {
+        if(A.lastTimeStake>= minimumPeriod){
+        uint stakePeriod = block.timestamp - A.lastTimeStake;
+        uint bonus = (o.currentStake * 347/1000000000 * stakePeriod);
+
+        A.currentStake += bonus+_amount
+        } else{
+          A.currentStake += _amount;
+        }
+        
+        A.lastTimeStake = block.timestamp;
+        if(stakes[msg.sender] == 0) addStakeholder(msg.sender);
+        stake[msg.sender] += _amount;
+        stakingToken.safeTransferFrom(msg.sender, address(this), _amount);
+        emit Staked(msg.sender, _amount);
     }
 
     /**
@@ -167,7 +197,7 @@ contract BoredApe is ERC20, Ownable {
         view
         returns(uint256)
     {
-        return stakes[_stakeholder] * (0.003);
+        return stakes[_stakeholder] * ();
     }
 
     /**
