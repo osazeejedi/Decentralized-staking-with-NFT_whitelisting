@@ -11,7 +11,7 @@ contract BoredApeTokens is IERC20Metadata{
     mapping(address=> uint) private _balances;
     mapping(address=> mapping(address => uint)) private allowances;
     constructor () {
-        _name = "Bored Ape Token";
+        _name = "BoredApeToken";
         _symbol ="BAT";
         _decimal = 18;
         _totalSupply = 10000000000 * 10 ** _decimal;
